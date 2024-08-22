@@ -60,9 +60,16 @@ const MainPage = () => {
     language === "ru" ? "Гороскоп на сегодня" : "Horoscope for Today";
 
   return (
-    <div>
+    <div style={{ textAlign: "center" }}>
       <h1>{buttonText}</h1>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "10px",
+          justifyContent: "center",
+        }}
+      >
         {zodiacSigns.map((zodiac) => (
           <button
             key={zodiac.sign}
@@ -72,7 +79,9 @@ const MainPage = () => {
               fontSize: "16px",
               display: "flex",
               alignItems: "center",
+              justifyContent: "center",
               gap: "10px",
+              width: "85%",
             }}
           >
             {language === "ru" ? zodiac.ru : zodiac.en} | {today} |{" "}

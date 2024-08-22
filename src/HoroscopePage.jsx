@@ -85,11 +85,26 @@ const HoroscopePage = () => {
 
   return (
     <div {...handlers} style={{ touchAction: "pan-y" }}>
-      <h1>
+      <h1
+        style={{
+          textAlign: "center",
+        }}
+      >
         {language === "ru" ? zodiacSigns[sign]?.ru : zodiacSigns[sign]?.en}{" "}
         {language === "ru" ? "Гороскоп" : "Horoscope"}
       </h1>
-      {response && <p style={{ marginTop: "20px" }}>{response}</p>}
+      {response && (
+        <h4
+          style={{
+            marginTop: "20px",
+            textAlign: "center",
+            width: "85%",
+            margin: "0 auto",
+          }}
+        >
+          {response}
+        </h4>
+      )}
     </div>
   );
 };
