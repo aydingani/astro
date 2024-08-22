@@ -89,48 +89,62 @@ const MainPage = () => {
 const HoroscopePage = () => {
   const { sign } = useParams();
   const [response, setResponse] = useState(null);
-  // const navigate = useNavigate();
-  const language = detectLanguage();
+  const navigate = useNavigate();
+  const [language, setLanguage] = useState("en");
 
   useEffect(() => {
-    const tg = window.Telegram.WebApp;
+    const detectLanguage = () => {
+      const userLanguage =
+        window.Telegram?.WebApp?.initDataUnsafe?.user?.language_code;
+      return userLanguage === "ru" ? "ru" : "en";
+    };
 
-    tg.BackButton.show();
-    tg.BackButton.onClick(() => {
-      tg.close();
-    });
-    const getHoroscope = async () => {
-      try {
-        const res = await fetch("https://poker247tech.ru/get_horoscope/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            sign: sign,
-            language: language === "ru" ? "original" : "translated",
-            period: "today",
-          }),
-        });
+    setLanguage(detectLanguage());
 
-        if (!res.ok) {
-          throw new Error("Network response was not ok");
+    if (window.Telegram && window.Telegram.WebApp) {
+      const tg = window.Telegram.WebApp;
+
+      // Set up the back button event listener
+      tg.onEvent("backButtonClicked", () => {
+        navigate(-1); // Navigate back to the previous page
+      });
+
+      // Fetch horoscope
+      const getHoroscope = async () => {
+        try {
+          const res = await fetch("https://poker247tech.ru/get_horoscope/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              sign: sign,
+              language: language === "ru" ? "original" : "translated",
+              period: "today",
+            }),
+          });
+
+          if (!res.ok) {
+            throw new Error("Network response was not ok");
+          }
+
+          const data = await res.json();
+          setResponse(data.horoscope || "No horoscope found");
+        } catch (error) {
+          console.error("Error fetching horoscope:", error);
+          setResponse(`Error: ${error.message}`);
         }
+      };
 
-        const data = await res.json();
-        setResponse(data.horoscope || "No horoscope found");
-      } catch (error) {
-        console.error("Error fetching horoscope:", error);
-        setResponse(`Error: ${error.message}`);
-      }
-    };
+      getHoroscope();
 
-    getHoroscope();
-    return () => {
-      tg.BackButton.hide();
-      tg.BackButton.offClick(); // Unsubscribe from the event
-    };
-  }, [sign, language]);
+      return () => {
+        tg.offEvent("backButtonClicked"); // Unsubscribe from the back button event
+      };
+    } else {
+      console.error("Telegram WebApp SDK is not loaded.");
+    }
+  }, [sign, language, navigate]);
 
   return (
     <div>
