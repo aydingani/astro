@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -93,7 +93,7 @@ const HoroscopePage = () => {
   const [language, setLanguage] = useState("en");
 
   // Swipe detection variables
-  let touchStartX = 0;
+  const touchStartX = useRef(0);
 
   useEffect(() => {
     const detectLanguage = () => {
@@ -152,14 +152,14 @@ const HoroscopePage = () => {
     }
 
     const handleTouchStart = (e) => {
-      touchStartX = e.touches[0].clientX;
+      touchStartX.current = e.touches[0].clientX;
     };
 
     const handleTouchEnd = (e) => {
       const touchEndX = e.changedTouches[0].clientX;
       const touchThreshold = 50; // Minimum swipe distance in pixels
 
-      if (touchStartX - touchEndX > touchThreshold) {
+      if (touchStartX.current - touchEndX > touchThreshold) {
         navigate(-1); // Navigate back to the previous page
       }
     };
@@ -175,14 +175,6 @@ const HoroscopePage = () => {
 
   return (
     <div>
-      {/* <button
-        onClick={() => navigate(-1)}
-        style={{ position: "absolute", top: "10px", left: "10px" }}
-      >
-        {language === "ru" ? "Назад" : "Back"}
-      </button> */}
-
-      {/* Telegram back button will be visible */}
       <h1>
         {sign.charAt(0).toUpperCase() + sign.slice(1)}{" "}
         {language === "ru" ? "Гороскоп" : "Horoscope"}
