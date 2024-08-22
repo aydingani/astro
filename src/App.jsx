@@ -92,6 +92,9 @@ const HoroscopePage = () => {
   const navigate = useNavigate();
   const [language, setLanguage] = useState("en");
 
+  // Swipe detection variables
+  let touchStartX = 0;
+
   useEffect(() => {
     const detectLanguage = () => {
       const userLanguage =
@@ -147,6 +150,27 @@ const HoroscopePage = () => {
     } else {
       console.error("Telegram WebApp SDK is not loaded.");
     }
+
+    const handleTouchStart = (e) => {
+      touchStartX = e.touches[0].clientX;
+    };
+
+    const handleTouchEnd = (e) => {
+      const touchEndX = e.changedTouches[0].clientX;
+      const touchThreshold = 50; // Minimum swipe distance in pixels
+
+      if (touchStartX - touchEndX > touchThreshold) {
+        navigate(-1); // Navigate back to the previous page
+      }
+    };
+
+    window.addEventListener("touchstart", handleTouchStart);
+    window.addEventListener("touchend", handleTouchEnd);
+
+    return () => {
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchend", handleTouchEnd);
+    };
   }, [sign, language, navigate]);
 
   return (
@@ -157,6 +181,8 @@ const HoroscopePage = () => {
       >
         {language === "ru" ? "Назад" : "Back"}
       </button> */}
+
+      {/* Telegram back button will be visible */}
       <h1>
         {sign.charAt(0).toUpperCase() + sign.slice(1)}{" "}
         {language === "ru" ? "Гороскоп" : "Horoscope"}
