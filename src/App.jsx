@@ -24,18 +24,23 @@ import {
 } from "react-icons/gi";
 
 const zodiacSigns = [
-  { sign: "aries", icon: <GiAries /> },
-  { sign: "taurus", icon: <GiTaurus /> },
-  { sign: "gemini", icon: <GiGemini /> },
-  { sign: "cancer", icon: <GiCancer /> },
-  { sign: "leo", icon: <GiLeo /> },
-  { sign: "virgo", icon: <GiVirgo /> },
-  { sign: "libra", icon: <GiLibra /> },
-  { sign: "scorpio", icon: <GiScorpio /> },
-  { sign: "sagittarius", icon: <GiSagittarius /> },
-  { sign: "capricorn", icon: <GiCapricorn /> },
-  { sign: "aquarius", icon: <GiAquarius /> },
-  { sign: "pisces", icon: <GiPisces /> },
+  { sign: "aries", icon: <GiAries />, ru: "Овен", en: "Aries" },
+  { sign: "taurus", icon: <GiTaurus />, ru: "Телец", en: "Taurus" },
+  { sign: "gemini", icon: <GiGemini />, ru: "Близнецы", en: "Gemini" },
+  { sign: "cancer", icon: <GiCancer />, ru: "Рак", en: "Cancer" },
+  { sign: "leo", icon: <GiLeo />, ru: "Лев", en: "Leo" },
+  { sign: "virgo", icon: <GiVirgo />, ru: "Дева", en: "Virgo" },
+  { sign: "libra", icon: <GiLibra />, ru: "Весы", en: "Libra" },
+  { sign: "scorpio", icon: <GiScorpio />, ru: "Скорпион", en: "Scorpio" },
+  {
+    sign: "sagittarius",
+    icon: <GiSagittarius />,
+    ru: "Стрелец",
+    en: "Sagittarius",
+  },
+  { sign: "capricorn", icon: <GiCapricorn />, ru: "Козерог", en: "Capricorn" },
+  { sign: "aquarius", icon: <GiAquarius />, ru: "Водолей", en: "Aquarius" },
+  { sign: "pisces", icon: <GiPisces />, ru: "Рыбы", en: "Pisces" },
 ];
 
 const detectLanguage = () => {
@@ -79,8 +84,8 @@ const MainPage = () => {
               gap: "10px",
             }}
           >
-            {zodiac.sign.charAt(0).toUpperCase() + zodiac.sign.slice(1)} |{" "}
-            {today} |{zodiac.icon}{" "}
+            {language === "ru" ? zodiac.ru : zodiac.en} | {today} |{" "}
+            {zodiac.icon}
           </button>
         ))}
       </div>
