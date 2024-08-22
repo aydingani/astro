@@ -2,6 +2,21 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSwipeable } from "react-swipeable";
 
+const zodiacSigns = {
+  aries: { ru: "Овен", en: "Aries" },
+  taurus: { ru: "Телец", en: "Taurus" },
+  gemini: { ru: "Близнецы", en: "Gemini" },
+  cancer: { ru: "Рак", en: "Cancer" },
+  leo: { ru: "Лев", en: "Leo" },
+  virgo: { ru: "Дева", en: "Virgo" },
+  libra: { ru: "Весы", en: "Libra" },
+  scorpio: { ru: "Скорпион", en: "Scorpio" },
+  sagittarius: { ru: "Стрелец", en: "Sagittarius" },
+  capricorn: { ru: "Козерог", en: "Capricorn" },
+  aquarius: { ru: "Водолей", en: "Aquarius" },
+  pisces: { ru: "Рыбы", en: "Pisces" },
+};
+
 const HoroscopePage = () => {
   const { sign } = useParams();
   const [response, setResponse] = useState(null);
@@ -71,7 +86,7 @@ const HoroscopePage = () => {
   return (
     <div {...handlers} style={{ touchAction: "pan-y" }}>
       <h1>
-        {sign.charAt(0).toUpperCase() + sign.slice(1)}{" "}
+        {language === "ru" ? zodiacSigns[sign]?.ru : zodiacSigns[sign]?.en}{" "}
         {language === "ru" ? "Гороскоп" : "Horoscope"}
       </h1>
       {response && <p style={{ marginTop: "20px" }}>{response}</p>}
