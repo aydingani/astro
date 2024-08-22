@@ -36,21 +36,34 @@ const zodiacSigns = [
   { sign: "pisces", icon: <GiPisces /> },
 ];
 
+const detectLanguage = () => {
+  const userLanguage =
+    window.Telegram?.WebApp?.initDataUnsafe?.user?.language_code;
+  return userLanguage === "ru" ? "ru" : "en";
+};
+
 const MainPage = () => {
   const navigate = useNavigate();
-  const today = new Date().toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  const language = detectLanguage();
+  const today = new Date().toLocaleDateString(
+    language === "ru" ? "ru-RU" : "en-US",
+    {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    }
+  );
 
   const handleButtonClick = (sign) => {
     navigate(`/horoscope/${sign}`);
   };
 
+  const buttonText =
+    language === "ru" ? "Гороскоп на сегодня" : "Horoscope for Today";
+
   return (
     <div>
-      <h1>Horoscope</h1>
+      <h1>{buttonText}</h1>
       <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
         {zodiacSigns.map((zodiac) => (
           <button
@@ -64,9 +77,8 @@ const MainPage = () => {
               gap: "10px",
             }}
           >
-            {zodiac.sign.charAt(0).toUpperCase() + zodiac.sign.slice(1)} -{" "}
-            {today}
-            {zodiac.icon}{" "}
+            {zodiac.sign.charAt(0).toUpperCase() + zodiac.sign.slice(1)} |{" "}
+            {today} |{zodiac.icon}{" "}
           </button>
         ))}
       </div>
@@ -77,9 +89,16 @@ const MainPage = () => {
 const HoroscopePage = () => {
   const { sign } = useParams();
   const [response, setResponse] = useState(null);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+  const language = detectLanguage();
 
   useEffect(() => {
+    const tg = window.Telegram.WebApp;
+
+    tg.BackButton.show();
+    tg.BackButton.onClick(() => {
+      tg.close();
+    });
     const getHoroscope = async () => {
       try {
         const res = await fetch("https://poker247tech.ru/get_horoscope/", {
@@ -89,7 +108,7 @@ const HoroscopePage = () => {
           },
           body: JSON.stringify({
             sign: sign,
-            language: "translated",
+            language: language === "ru" ? "original" : "translated",
             period: "today",
           }),
         });
@@ -107,17 +126,24 @@ const HoroscopePage = () => {
     };
 
     getHoroscope();
-  }, [sign]);
+    return () => {
+      tg.BackButton.hide();
+      tg.BackButton.offClick(); // Unsubscribe from the event
+    };
+  }, [sign, language]);
 
   return (
     <div>
-      <button
+      {/* <button
         onClick={() => navigate(-1)}
         style={{ position: "absolute", top: "10px", left: "10px" }}
       >
-        Back
-      </button>
-      <h1>{sign.charAt(0).toUpperCase() + sign.slice(1)} Horoscope</h1>
+        {language === "ru" ? "Назад" : "Back"}
+      </button> */}
+      <h1>
+        {sign.charAt(0).toUpperCase() + sign.slice(1)}{" "}
+        {language === "ru" ? "Гороскоп" : "Horoscope"}
+      </h1>
       {response && <p style={{ marginTop: "20px" }}>{response}</p>}
     </div>
   );
