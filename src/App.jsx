@@ -104,8 +104,10 @@ const HoroscopePage = () => {
     if (window.Telegram && window.Telegram.WebApp) {
       const tg = window.Telegram.WebApp;
 
+      tg.BackButton.show();
+
       // Set up the back button event listener
-      tg.onEvent("backButtonClicked", () => {
+      tg.BackButton.onClick(() => {
         navigate(-1); // Navigate back to the previous page
       });
 
@@ -139,7 +141,8 @@ const HoroscopePage = () => {
       getHoroscope();
 
       return () => {
-        tg.offEvent("backButtonClicked"); // Unsubscribe from the back button event
+        tg.BackButton.hide(); // Hide the back button when component unmounts
+        tg.BackButton.offClick(); // Remove the click event listener
       };
     } else {
       console.error("Telegram WebApp SDK is not loaded.");
