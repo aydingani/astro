@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import {
   GiAries,
   GiTaurus,
@@ -33,6 +34,7 @@ const zodiacSigns = [
   { sign: "aquarius", icon: <GiAquarius />, ru: "Водолей", en: "Aquarius" },
   { sign: "pisces", icon: <GiPisces />, ru: "Рыбы", en: "Pisces" },
 ];
+import { getLanguage, setLanguage } from "./utils/languageUtils";
 
 const detectLanguage = () => {
   const userLanguage =
@@ -41,8 +43,10 @@ const detectLanguage = () => {
 };
 
 const MainPage = () => {
+  const [language, setLang] = useState(getLanguage());
+
   const navigate = useNavigate();
-  const language = detectLanguage();
+  //   const language = detectLanguage();
   const today = new Date().toLocaleDateString(
     language === "ru" ? "ru-RU" : "en-US",
     {
@@ -51,6 +55,14 @@ const MainPage = () => {
       day: "numeric",
     }
   );
+
+  useEffect(() => {
+    setLanguage(language);
+  }, [language]);
+
+  const handleLanguageChange = (lang) => {
+    setLang(lang);
+  };
 
   const handleButtonClick = (sign) => {
     navigate(`/horoscope/${sign}`);
@@ -62,6 +74,17 @@ const MainPage = () => {
   return (
     <div style={{ textAlign: "center" }}>
       <h1>{buttonText}</h1>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          gap: "20px",
+          marginBottom: "20px",
+        }}
+      >
+        <button onClick={() => handleLanguageChange("ru")}>Русский</button>
+        <button onClick={() => handleLanguageChange("en")}>English</button>
+      </div>
       <div
         style={{
           display: "flex",

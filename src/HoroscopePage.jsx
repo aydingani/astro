@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSwipeable } from "react-swipeable";
+import { getLanguage } from "./utils/languageUtils";
 
 const zodiacSigns = {
   aries: { ru: "Овен", en: "Aries" },
@@ -21,7 +22,7 @@ const HoroscopePage = () => {
   const { sign } = useParams();
   const [response, setResponse] = useState(null);
   const navigate = useNavigate();
-  const [language, setLanguage] = useState("en");
+  const [language, setLanguage] = useState(getLanguage());
 
   const handlers = useSwipeable({
     onSwipedRight: () => navigate(-1),
