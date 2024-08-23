@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   GiAries,
   GiTaurus,
@@ -36,11 +36,11 @@ const zodiacSigns = [
 ];
 import { getLanguage, setLanguage } from "./utils/languageUtils";
 
-const detectLanguage = () => {
-  const userLanguage =
-    window.Telegram?.WebApp?.initDataUnsafe?.user?.language_code;
-  return userLanguage === "ru" ? "ru" : "en";
-};
+// const detectLanguage = () => {
+//   const userLanguage =
+//     window.Telegram?.WebApp?.initDataUnsafe?.user?.language_code;
+//   return userLanguage === "ru" ? "ru" : "en";
+// };
 
 const MainPage = () => {
   const [language, setLang] = useState(getLanguage());
